@@ -1,5 +1,5 @@
 # orie4741
-ORIE4741 Project
+Project:
 
 Team Members:
 Zhihan Wang (Zee) zw429
