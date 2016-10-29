@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Hotel Data Analysis - Midterm Report}
+\author{Zhihan Wang (zw429), Junrui Ye (jy745)}
+\date{}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{margin=0.5in}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\begin{itemize}
+    \item We are using hotel-booking data from Kaggle website to ananlyze the impact of different factors in hotel booking. The final goal of this project is to predict whether a hotel will be booked and how much the gross booking cost in USD (GBU) will be. 
+The midterm report focuses on analysis of which features will affect the prediction the most and fit preliminary models for predicting GBU value of a new booking which is the first milestone before reaching the final goal.
+\end{itemize} 
+
+\section{Data Cleaning}
+\begin{itemize}
+    \item We select factors that we believe are somehow related to our prediction. Missing values were filtered out except those in GBU column. This is done using Python since the data is too big to process with Julia(all RAM will be used and computer could not handle). So the new data frame contains no NA values in any columns other than gross bookings usd. This gives us a data frame without unnecessary NA values which is small enough for Julia to process yet large enough to build models with without under-fitting problems. 
+    \item To check data corruptions, the columns with Boolean values were checked to see whether the values are all 0s and 1s. For the columns with specific IDs or codes from the website, it is not clear whether the values are corrupted as no information of the detailed codes were given.
+\end{itemize}
+
+\section{Data Description}
+\begin{itemize}
+    \item Data Descriptions\\
+    \includegraphics[scale=0.4]{datad.png}
+    \item Main Features to Focus on
+    \begin{itemize}
+        \item The main features to focus on include hotel features like star rating, hotel unit price, review score, customer features like historical booking price of the customer, and search features like length of stay, number of rooms. We choose these features because intuitively they are thought to affect the gross booking values. We perform some preliminary analysis on these data. The relationship between GBU and each of these features were plotted (shown below) and general patterns were discovered as expected. 
+    \end{itemize}
+\end{itemize}
+
+\section{Descriptive Statistics}
+\begin{itemize}
+    \item Plots and  Feature Exploration
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[scale=0.4]{6plots.png}
+    \end{figure}
+    \begin{itemize}
+        \item The graphs above show the general correlations of gross booking cost in USD(GBU) with other features specified.
+        \item We have selected star rating, hotel unit price, searched length of stay, review scores to be the main features of the model(discussed in detail in the Analysis Strategies section). This is because it is clear that the first four plots of those features show a great correlation between GBU and the feature specified on the x axis.
+        \item More plots and analysis were also done to evaluate other features which are not shown here. Some histograms of features are presented here to show how the distribution of the features are.
+    \end{itemize}
+\end{itemize}
+
+\section{Analysis Strategies}
+\begin{itemize}
+    \item Models and Graphs:
+    \begin{itemize}
+        \item We perform regressions on selected data to predict whether the customer will book the hotel and the GBU of the bookings.
+        \item For preliminary analysis, we fit three different linear regression models: \newline
+        Model1: Regression on four features: price, days, review rating, star rating\newline
+        Model2: Regression on nine features: price, days, number of rooms, star rating, promotion boolean, brand boolean, location score, booking window, visitor's average booked hotel price\newline
+        Model3: Multiply days and number of room together. Other features remain the same as Model2.
+        
+    \end{itemize}
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[scale=0.5]{3model.png}
+    \end{figure}
+    \item How to Test Effectiveness of the Models
+    \begin{itemize}
+        \item Mean Square Error\newline
+        Compute the mean square error for each model, choose the model with the least error.
+        \item Test Models on Test Set \newline
+        After picking the best model, it was tested on the test set in order to check its error and effectiveness.
+        \item Cross-validation \newline
+        Cross-validation was used in order to check the least squared errors of each model thus pick the best one for future analysis and prediction.
+        
+    \end{itemize}
+    \item How to Avoid Under-fitting and Over-fitting
+    \begin{itemize}
+        \item To prevent under-fitting, large amount of data was used to perform the analysis on. Also, various features were used to fit the initial models and validated using Cross-validation to measure their significance on the prediction.
+        \item To prevent over-fitting, we used regularization to reduce the variance of the model. Lasso regression and l1 regularization were used in order to test the significance of each feature on the prediction and perform feature elimination when needed.
+    \end{itemize}
+\end{itemize}
+
+
+\section{Future Plan}
+\begin{itemize}
+    \item Future Data Modeling and Prediction
+    \begin{itemize}
+        \item Regularization will be used later to discover details of the features included since they would be penalized less compared to l1 regularization. 
+        \item Linear or polynomial regression(depends on the model testing results) will be used to determine a detailed price of hotel booking. Thus when having certain information of a hotel search in the future, the potential total price of the booking can be predicted which would also be helpful for prediction of whether the search would lead to a booking.
+        \item Since the result is a Boolean value, logistic regression may be considered as a decent model to study whether a specific hotel search will lead to a booking.
+    \end{itemize}
+    \item Data Visualization
+    \begin{itemize}
+        \item As further analysing goes, more data visualization will be produced in order to give a better understanding and explanation to audience of what stories the data is conveying and what result our analysis is providing.
+    \end{itemize}
+\end{itemize}
+
+
+
+\end{document}
